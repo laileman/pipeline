@@ -15,41 +15,7 @@ pipeline {
                 }
             }
         }
-        stage('clone git repo') {
-            steps {
-                script {
-                    echo 'Step 2: Cloning git repo'
-
-                    // add credentials
-                    withCredentials([usernamePassword(credentialsId: 'c717427e-dd38-4092-9af6-da35b6eb4986', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh 'echo "username: $GIT_USERNAME" && echo "password: $GIT_PASSWORD"'
-                       
-                        sh 'df -h'
-                        
-                    }
-                    
-                    withCredentials([sshUserPrivateKey(credentialsId: 'github', keyFileVariable: 'SSH_KEY', passphraseVariable: 'SSH_PASSPHRASE')]){
-                      sh 'echo "SSH_KEY: $SSH_KEY" && echo "SSH_PASSPHRASE: $SSH_PASSPHRASE"'
-                      sh 'ls -la'
-                      sh 'pwd'
-                      //添加 ssh 密钥到 ssh-agent
-                      sh '''
-                        eval "$(ssh-agent -s)"
-                        ssh-add $SSH_KEY
-                        # sh 'git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/laileman/pipeline.git'
-                        git clonegit@github.com:laileman/pipeline.git pipeline-demo
-                      '''
-                    }
-                    sh 'ls -la'
-                    sh 'pwd'
-                    sh 'cd pipeline-demo'
-                    sh 'ls -la'
-                    sh 'pwd'
-              }
-            
-            }
-        
-        }
+       
 
         stage('Parallel Execution') {
             steps {
