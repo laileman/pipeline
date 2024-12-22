@@ -21,7 +21,14 @@ pipeline {
             stage('run docker info') {
               steps {
                 script {
-                  sh 'docker --info'
+                  sh 'docker info'
+                }
+              }
+            }
+            stage('run docker info again') {
+              steps {
+                script {
+                  sh 'docker info'
                 }
               }
             }
