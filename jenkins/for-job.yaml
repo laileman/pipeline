@@ -1,0 +1,56 @@
+pipeline {
+    agent {
+        docker {
+            image 'ubuntu:latest'
+            args '-u root' // 以 root 用户运行
+        }
+    }
+
+    stages {
+        stage('List Block Devices') {
+            steps {
+                script {
+                    echo 'Step 1: Executing lsblk'
+                    sh 'apt-get update && apt-get install -y util-linux && lsblk'
+                }
+            }
+        }
+
+        stage('Parallel Execution') {
+            steps {
+                script {
+                    def parallelSteps = [:]
+                    for (int i = 1; i <= 4; i++) {
+                        def stepIndex = i // 捕获当前的循环变量
+                        parallelSteps["Step 2.${stepIndex}"] = {
+                            script {
+                                echo "Executing Step 2.${stepIndex}"
+                                sh "echo 'This is Step 2.${stepIndex}'"
+                                sh "pwd"
+                            }
+                        }
+                    }
+                    parallel parallelSteps
+                }
+            }
+        }
+
+        stage('df -h - Part 1') {
+            steps {
+                script {
+                    echo 'Step 3: df -h'
+                    sh 'df -h'
+                }
+            }
+        }
+
+        stage('Docker Info - Part 2') {
+            steps {
+                script {
+                    echo 'Step 4: Rechecking Docker Info'
+                    sh 'ls -la'
+                }
+            }
+        }
+    }
+}
