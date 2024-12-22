@@ -32,7 +32,7 @@ pipeline {
                       sh 'echo "SSH_KEY: $SSH_KEY" && echo "SSH_PASSPHRASE: $SSH_PASSPHRASE"'
                       sh 'ls -la'
                       sh 'pwd'
-                      # 添加 ssh 密钥到 ssh-agent
+                      //添加 ssh 密钥到 ssh-agent
                       sh '''
                         eval "$(ssh-agent -s)"
                         ssh-add $SSH_KEY
