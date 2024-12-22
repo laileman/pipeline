@@ -1,0 +1,50 @@
+pipeline {
+    agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker'
+        }
+    }
+    stages {
+        stage("get lsblk"){
+          steps {
+            script {
+                sh 'run lsblk'
+                sh 'lsblk'
+            }
+          }
+        }
+        stage ('Parallel run') {
+          parallel {
+            stage('run docker version') {
+              steps {
+                script {
+                  sh 'docker --version'
+                }
+              }
+            }
+            stage('run docker info') {
+              steps {
+                script {
+                  sh 'docker --info'
+                }
+              }
+            }
+          }
+        }
+        stage ('run docker ps') {
+          steps {
+            script {
+              sh 'docker ps'
+            }
+          }
+        }
+        stage ('run docker images') {
+          steps {
+            script {
+              sh 'docker images'
+            }
+          }
+        }
+    }
+}
