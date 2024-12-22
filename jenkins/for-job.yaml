@@ -11,7 +11,7 @@ pipeline {
             steps {
                 script {
                     echo 'Step 1: Executing lsblk'
-                    sh 'apt-get update && apt-get install -y util-linux && lsblk'
+                    sh 'apt-get update && apt-get install -y util-linux  openssh-client && lsblk'
                 }
             }
         }
