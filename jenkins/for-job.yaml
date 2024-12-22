@@ -15,6 +15,29 @@ pipeline {
                 }
             }
         }
+        stage('clone git repo') {
+            steps {
+                script {
+                    echo 'Step 2: Cloning git repo'
+                    // clone repo
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[
+                            url: 'https://github.com/laileman/pipeline.git',
+                            credentialsId: 'github'
+                            ]]
+                    ])
+                    sh 'ls -la'
+                    sh 'pwd'
+                    sh 'cd pipeline'
+                    sh 'ls -la'
+                    sh 'pwd'
+              }
+            
+            }
+        
+        }
 
         stage('Parallel Execution') {
             steps {
@@ -26,7 +49,7 @@ pipeline {
                             script {
                                 echo "Executing Step 2.${stepIndex}"
                                 sh "echo 'This is Step 2.${stepIndex}'"
-                                sh "pwd"
+                                sh "pwd;ls -la"
                             }
                         }
                     }
