@@ -5,7 +5,6 @@ pipeline {
         stage("get lsblk"){
           steps {
             script {
-                sh 'run lsblk'
                 sh 'lsblk'
             }
           }
