@@ -19,15 +19,15 @@ pipeline {
             steps {
                 script {
                     echo 'Step 2: Cloning git repo'
-                    // clone repo
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/main']],
-                        userRemoteConfigs: [[
-                            url: 'https://github.com/laileman/pipeline.git',
-                            credentialsId: 'github'
-                            ]]
-                    ])
+
+                    // add credentials
+                    withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh 'echo "username: $GIT_USERNAME" && echo "password: $GIT_PASSWORD"'
+                        sh 'git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/laileman/pipeline.git'
+                        sh 'df -h'
+                        
+                    }
+                    
                     sh 'ls -la'
                     sh 'pwd'
                     sh 'cd pipeline'
